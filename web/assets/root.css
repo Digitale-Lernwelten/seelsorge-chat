@@ -1,0 +1,183 @@
+/* Import of Fonts */
+
+@font-face {
+	font-family: AmaticSC-Bold;
+	src: url(./fonts/AmaticSC-Bold.ttf);
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: AmaticSC-Regular;
+	src: url(./fonts/AmaticSC-Regular.ttf);
+}
+
+@font-face {
+	font-family: Raleway-Bold;
+	src: url(./fonts/Raleway-Bold.ttf);
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: Raleway-Bold-Italic;
+	src: url(./fonts/Raleway-BoldItalic.ttf);
+	font-weight: bold;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: Raleway-Italic;
+	src: url(./fonts/Raleway-Italic.ttf);
+	font-style: italic;
+}
+
+@font-face {
+	font-family: Raleway-Light;
+	src: url(./fonts/Raleway-Light.ttf);
+	font-weight: 300;
+}
+
+@font-face {
+	font-family: Raleway-Light-Italic;
+	src: url(./fonts/Raleway-LightItalic.ttf);
+	font-weight: 300;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: Raleway-Medium;
+	src: url(./fonts/Raleway-Medium.ttf);
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: Raleway-Medium-Italic;
+	src: url(./fonts/Raleway-MediumItalic.ttf);
+	font-weight: 500;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: Raleway-Regular;
+	src: url(./fonts/Raleway-Regular.ttf);
+}
+
+@font-face {
+	font-family: Raleway-SemiBold;
+	src: url(./fonts/Raleway-SemiBold.ttf);
+	font-weight: 600;
+}
+
+@font-face {
+	font-family: Raleway-SemiBold-Italic;
+	src: url(./fonts/Raleway-SemiBoldItalic.ttf);
+	font-weight: 600;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: RammettoOne-Regular;
+	src: url(./fonts/RammettoOne-Regular.ttf);
+}
+
+/* Set Variables */
+
+:root {
+	--main-text: Raleway-Light, sans-serif;
+	--main-heading: AmeticSC-Regular, serif;
+	--main-h3: RammettoOne-Regular, serif;
+	--orange: #F89C0C;
+	--test: rgb(248, 156, 12);
+	--main-bold: Raleway-Bold, sans-serif;
+}
+
+/* Basic Configs*/
+
+b {
+	font-family: var(--main-bold);
+	font-weight: bold;
+}
+
+p,
+ul,
+li {
+	font-family: var(--main-text);
+	font-size: 1.45rem;
+}
+
+h1,
+h2 {
+	font-family: var(--main-heading);
+}
+
+h2 {
+	font-size: 4.5rem;
+}
+
+h3 {
+	font-family: var(--main-h3);
+	font-size: 1.8rem;
+	margin-block-start: 0;
+}
+
+h4 {
+	font-family: var(--main-h3);
+	font-size: 1.6rem;
+	margin-block-start: 0;
+	margin-block-end: 0.7em;
+}
+
+main {
+	display: block;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+nav p,
+footer p {
+	font-family: var(--main-h3);
+}
+
+a:active {
+	color: var(--orange);
+}
+
+a {
+	color: black;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+a:active,
+a:hover,
+a:focus {
+	color: var(--orange);
+}
+
+a.link {
+	text-decoration: underline;
+	color: var(--orange);
+}
+
+nav a:-webkit-any-link {
+	color: black;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+nav a:-webkit-any-link:active,
+nav a:-webkit-any-link:hover,
+nav a:-webkit-any-link:focus,
+nav a:active,
+nav a:hover,
+nav a:focus {
+	color: var(--orange);
+}
+
+a.link:hover,
+a.link:active,
+a.link:focus {
+	color: #A47121;
+}

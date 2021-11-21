@@ -1,2 +1,2 @@
 # seelsorge-chat
-Fork of soul-chat.de
+Fork of original soulchat.de
