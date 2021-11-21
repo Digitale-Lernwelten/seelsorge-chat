@@ -18,11 +18,13 @@ async function privacyDisclaimer() {
 	};
 
 	//add script
+	/*
 	const addScript = () => {
 		let script = document.createElement("script");
 		script.setAttribute('src', 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/ee158a48c0cc44ceaca5fe7ae3366ad05f2334f12c3644f295f739f0be9038ed.js');
 		document.head.appendChild(script);
 	}
+*/
 
 	for (let i = 0; i < cookies.length; i++) {
 		let cookie = cookies[i];
