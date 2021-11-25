@@ -131,22 +131,6 @@ function faqBox() {
 };
 setTimeout(faqBox, 0);
 
-function typeText() {
-	const heading = document.querySelector("#animated");
-	const sourceText = heading.innerHTML + ""; // Dadurch erzwingen wir eine Kopie
-	for (let i = 0; i <= sourceText.length; i++) {
-		setTimeout(() => {
-			heading.innerHTML = sourceText.slice(0, i);
-		}, 650 * i);
-	};
-};
-
-document.addEventListener('DOMContentLoaded', function () {
-	if (document.querySelector("#animated") != null) {
-		setTimeout(typeText, 0);
-	};
-});
-
 function deleteCookies() {
 	const cookies = document.cookie.split(";");
 	for (let i = 0; i < cookies.length; i++) {

@@ -90,17 +90,6 @@ body footer {
 
 /* Fancy Dynamic Text */
 
-@keyframes blink {
-	50% {
-		border-color: #ffffff;
-	}
-}
-
-#animated {
-	border-right: 2px solid transparent;
-	animation: blink .5s step-end infinite alternate;
-}
-
 img.header-mobile {
 	display: none;
 }
@@ -128,30 +117,7 @@ header.header-main .headerimage {
 	max-width: 100%;
 }
 
-
-header.header-main h1 {
-	position: absolute;
-	color: white;
-	z-index: 10;
-	font-size: 8vw;
-	top: -0.4em;
-	right: 4.6em;
-	height: 8vw;
-	line-height: 8vw;
-}
-
 /* Header of sub Pages	*/
-
-header h1 {
-	position: absolute;
-	color: white;
-	z-index: 10;
-	font-size: 9vw;
-	line-height: 9vw;
-	top: 1em;
-	right: 1.8em;
-	word-spacing: -0.5vw;
-}
 
 header {
 	position: relative;
@@ -168,20 +134,6 @@ header div.sub-header {
 	right: 0;
 	top: 0.5em;
 	max-width: 42%;
-}
-
-header div.daten h1 {
-	word-spacing: -1vw;
-	font-size: 10vw;
-	right: 0.5em;
-	top: 0.5em;
-	line-height: 11vw;
-}
-
-header div.impressum h1 {
-	font-size: 7vw;
-	top: 0.6em;
-	right: 0em;
 }
 
 /* Main */
@@ -409,7 +361,7 @@ div.service-icon img {
 }
 
 /* Cookie Banner */
-/* &shy; */
+
 div.privacy-disclaimer {
 	display: none;
 	position: fixed;
@@ -611,8 +563,6 @@ div.no-slots.show {
 	}
 }
 
-@media screen and (min-width: 1600px) {}
-
 @media screen and (min-width: 1700px) {
 
 	header.header-main .icon,
@@ -622,8 +572,6 @@ div.no-slots.show {
 
 	}
 }
-
-@media screen and (min-width: 1800px) {}
 
 @media screen and (min-width: 2000px) {
 	main {
@@ -659,8 +607,6 @@ div.no-slots.show {
 	}
 }
 
-@media screen and (min-width: 2130px) {}
-
 @media screen and (min-width: 2200px) {
 
 	header.header-main .icon,
@@ -668,12 +614,6 @@ div.no-slots.show {
 		left: 7em;
 	}
 }
-
-@media screen and (min-width: 2300px) {}
-
-@media screen and (min-width: 2400px) {}
-
-@media screen and (min-width: 2500px) {}
 
 @media screen and (min-width: 2600px) {
 
@@ -685,18 +625,10 @@ div.no-slots.show {
 	}
 }
 
-@media screen and (min-width: 2700px) {}
 
 /* Responsive Design */
 
-@media screen and (max-width: 1450px) {}
-
-@media screen and (max-width: 1385px) {}
-
-@media screen and (max-width: 1220px) {}
-
 @media screen and (max-width: 1200px) {
-
 
 	div.service-time p {
 		font-size: 1.3rem;
@@ -717,10 +649,6 @@ div.no-slots.show {
 	}
 }
 
-@media screen and (max-width:1100px) {}
-
-@media screen and (max-width: 1050px) {}
-
 @media screen and (max-width: 1000px) {
 	header.header-main .icon {
 		left: 2.5em;
@@ -738,12 +666,6 @@ div.no-slots.show {
 		padding-left: 10%;
 	}
 }
-
-@media screen and (max-width: 960px) {}
-
-@media screen and (max-width: 900px) {}
-
-@media screen and (max-width: 890px) {}
 
 @media screen and (max-width: 850px) {
 	header.header-main .icon {
@@ -832,8 +754,6 @@ div.no-slots.show {
 		margin-top: -1em;
 	}
 }
-
-
 
 @media screen and (max-width: 700px) {
 	main {
@@ -933,8 +853,6 @@ div.no-slots.show {
 	}
 
 }
-
-@media screen and (max-width: 588px) {}
 
 @media screen and (max-width: 560px) {
 	div#cookies-denial-banner div.margin-wrap {
@@ -1091,14 +1009,6 @@ div.no-slots.show {
 		height: 5px;
 	}
 
-	header.header-main h1 {
-		font-size: 18vw;
-		top: 4.2em;
-		right: 0.6em;
-		line-height: 18vw;
-		height: 18vw;
-	}
-
 	#main-h2 {
 		display: none;
 	}
@@ -1203,14 +1113,6 @@ div.no-slots.show {
 		left: 2em;
 	}
 
-	header h1 {
-		font-size: 31vw;
-		line-height: 27vw;
-		top: 1.3em;
-		right: 0.6em;
-		word-spacing: -3.5vw;
-	}
-
 	main .accordion {
 		font-size: 1.4rem;
 	}
@@ -1218,26 +1120,6 @@ div.no-slots.show {
 	div.panel p,
 	div.panel a {
 		font-size: 1.3rem;
-	}
-
-	header div.impressum h1 {
-		top: 1.5em;
-		font-size: 17vw;
-		right: 0.35em;
-	}
-
-	h1 span.data-mobile {
-		display: inline-block;
-		width: 40px;
-	}
-
-	header div.daten h1 {
-		word-spacing: -2vw;
-		top: 1em;
-		right: 0;
-		font-size: 27vw;
-		left: 0.2em;
-		line-height: 34vw;
 	}
 
 	#denial-banner-accept {
@@ -1380,8 +1262,6 @@ div.no-slots.show {
 	}
 }
 
-@media screen and (max-width: 340px) {}
-
 @media screen and (max-width: 330px) {
 	button#accept {
 		margin-right: 4em;
@@ -1396,5 +1276,3 @@ div.no-slots.show {
 		padding: 30px 8px;
 	}
 }
-
-@media screen and (max-width: 320px) {}
