@@ -147,8 +147,18 @@ main[class="sub-page ueber-uns"] section {
 	margin-top: -0.6em;
 }
 
-main.sub-page>h3 {
+main.sub-page h3 {
 	margin-top: 0.2em;
+	color: white;
+}
+
+main.sub-page h3.faq {
+	margin-top: 0.2em;
+	color: black;
+}
+
+main.sub-page h3>span {
+	background-color: var(--grey);
 }
 
 main {
@@ -199,9 +209,9 @@ section.sponsor img {
 /* FAQ Box */
 
 .accordion {
+	border-radius: 12px;
 	position: relative;
-	background-color: #eee;
-	color: #444;
+	background-color: var(--grey);
 	cursor: pointer;
 	padding: 18px;
 	width: 100%;
@@ -214,12 +224,18 @@ section.sponsor img {
 	padding-right: 5em;
 }
 
+button.accordion {
+	font-family: var(--main-heading);
+	color: white;
+}
+
 .accordion.active {
 	margin-bottom: 0.5em;
 }
 
 .faq-wrapper {
-	box-shadow: 0px 3px 6px #00000029;
+	border-radius: 12px;
+	box-shadow: 0px 3px 6px #00000052;
 	margin-bottom: 2em;
 	margin-top: 2em;
 }

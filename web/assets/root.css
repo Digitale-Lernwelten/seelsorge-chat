@@ -83,11 +83,12 @@
 
 :root {
 	--main-text: Raleway-Light, sans-serif;
-	--main-heading: AmeticSC-Regular, serif;
+	--main-heading: AmaticSC-Regular, serif;
 	--main-h3: RammettoOne-Regular, serif;
 	--orange: #F89C0C;
 	--test: rgb(248, 156, 12);
 	--main-bold: Raleway-Bold, sans-serif;
+	--grey: #717070;
 }
 
 /* Basic Configs*/
@@ -114,7 +115,7 @@ h2 {
 }
 
 h3 {
-	font-family: var(--main-h3);
+	font-family: var(--main-heading);
 	font-size: 1.8rem;
 	margin-block-start: 0;
 }
