@@ -1,9 +1,14 @@
-/* Navigation */
+/***************
+Navigation
+***************/
+
 a#active {
 	color: var(--orange);
 }
 
-/* Mobile Menu	*/
+/***************
+Mobile Menu
+***************/
 
 .mobile-menu {
 	display: none;
@@ -86,9 +91,9 @@ body footer {
 	transition: filter 0.5s;
 }
 
-/* Header  from the main Page*/
-
-/* Fancy Dynamic Text */
+/**************************
+Header  of home.html
+***************************/
 
 img.header-mobile {
 	display: none;
@@ -117,7 +122,9 @@ header.header-main .headerimage {
 	max-width: 100%;
 }
 
-/* Header of sub Pages	*/
+/***********************
+Header of Sub-Pages
+************************/
 
 header {
 	position: relative;
@@ -136,7 +143,9 @@ header div.sub-header {
 	max-width: 42%;
 }
 
-/* Main */
+/**********
+Main
+**********/
 
 main.sub-page {
 	padding-left: 20%;
@@ -206,7 +215,9 @@ section.sponsor img {
 	margin: 2em 0;
 }
 
-/* FAQ Box */
+/****************
+FAQ Box
+****************/
 
 .accordion {
 	border-radius: 12px;
@@ -282,7 +293,9 @@ div.panel a {
 	transition: 0.45s transform ease;
 }
 
-/* Footer */
+/******************
+Footer
+******************/
 
 footer {
 	display: flex;
@@ -318,7 +331,9 @@ footer.impressum-footer {
 	margin-top: 20em;
 }
 
-/* Service Time */
+/***********************
+Service Time
+***********************/
 
 div.service-time {
 	z-index: 2147483647;
@@ -376,7 +391,9 @@ div.service-icon img {
 	transition: bottom 0.3s;
 }
 
-/* Cookie Banner */
+/********************
+Cookie Banner
+********************/
 
 div.privacy-disclaimer {
 	display: none;
@@ -538,7 +555,10 @@ body.strong-blur main {
 	transition: filter 0.5s;
 }
 
-/* Userlike Chat Widget */
+/********************************
+Userlike Chat Widget
+*********************************/
+
 div.no-slots {
 	z-index: 2147483647;
 	display: none;
@@ -569,7 +589,9 @@ div.no-slots.show {
 }
 
 
-/* Responsive Design for bigger Displays */
+/******************************************
+Responsive Design for bigger Displays
+******************************************/
 
 @media screen and (min-width: 1350px) {
 
@@ -642,7 +664,9 @@ div.no-slots.show {
 }
 
 
-/* Responsive Design */
+/***************************
+Responsive Design
+***************************/
 
 @media screen and (max-width: 1200px) {
 
@@ -883,7 +907,9 @@ div.no-slots.show {
 
 }
 
-/* Mobile Design */
+/*********************
+Mobile Design
+*********************/
 
 @media screen and (max-width: 500px) {
 	main {
