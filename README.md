@@ -1,2 +1,3 @@
-# seelsorge-chat
-Fork of original soulchat.de
+# Seelsorge Chat 🧑‍🤝‍🧑
+
+>>seelsorge-chat.de is a Fork of soul-chat.de for a print campaign
