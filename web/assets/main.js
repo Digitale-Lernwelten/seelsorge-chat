@@ -157,7 +157,7 @@ window.onscroll = function () {
 }
 
 const getFreeSlots = async () => {
-	const rawResponse = await fetch('https://soul-chat.de/status.php', {
+	const rawResponse = await fetch('https://seelsorge-chat.de/status.php', {
 		cache: "no-store",
 		headers: {
 			'Accept': 'application/json',

@@ -179,10 +179,6 @@ main h2 {
 	margin-bottom: 1em;
 }
 
-#main-h2-mobile {
-	display: none;
-}
-
 main h3 {
 	margin-block-end: 0em;
 	margin-bottom: 1em;
@@ -231,7 +227,7 @@ FAQ Box
 	outline: none;
 	transition: 0.4s;
 	font-family: var(--main-bold);
-	font-size: 1.4rem;
+	font-size: 1.7rem;
 	padding-right: 5em;
 }
 
@@ -1051,22 +1047,6 @@ Mobile Design
 		height: 5px;
 	}
 
-	#main-h2 {
-		display: none;
-	}
-
-	#main-h2-mobile {
-		display: block;
-		position: absolute;
-		top: -4.7em;
-		margin-bottom: 0;
-		z-index: 10;
-	}
-
-	section.home-section {
-		margin-top: 8em;
-	}
-
 	main h2 {
 		font-size: 3.5rem;
 	}
@@ -1151,7 +1131,7 @@ Mobile Design
 		max-width: 100%;
 		top: 0.5em;
 		z-index: 10;
-		width: 11vw;
+		width: 24vw;
 		left: 2em;
 	}
 
@@ -1194,13 +1174,6 @@ Mobile Design
 }
 
 @media screen and (max-width: 460px) {
-	#main-h2-mobile {
-		top: -4.5em;
-	}
-
-	header img.icon-mobile {
-		width: 13vw;
-	}
 }
 
 @media screen and (max-width: 450px) {
@@ -1212,9 +1185,7 @@ Mobile Design
 }
 
 @media screen and (max-width: 440px) {
-	#main-h2-mobile {
-		top: -4.3em;
-	}
+
 }
 
 @media screen and (max-width: 420px) {
@@ -1224,10 +1195,7 @@ Mobile Design
 }
 
 @media screen and (max-width: 410px) {
-	#main-h2-mobile {
-		font-size: 3.2rem;
-		top: -4.7em;
-	}
+
 }
 
 @media screen and (max-width: 400px) {
@@ -1237,10 +1205,6 @@ Mobile Design
 
 	header.header-main .icon {
 		left: 6em;
-	}
-
-	header img.icon-mobile {
-		width: 15vw;
 	}
 
 	div#cookies-denial-banner {
@@ -1258,9 +1222,6 @@ Mobile Design
 }
 
 @media screen and (max-width: 380px) {
-	#main-h2-mobile {
-		font-size: 3rem;
-	}
 
 	div#cookies-denial-banner {
 		justify-content: flex-start;
@@ -1288,20 +1249,13 @@ Mobile Design
 		left: 5em;
 	}
 
-	header img.icon-mobile {
-		width: 17vw;
-	}
-
 	#denial-banner-accept {
 		margin-right: 3em;
 	}
 }
 
 @media screen and (max-width: 340px) {
-	#main-h2-mobile {
-		font-size: 2.8rem;
-		top: -5em;
-	}
+
 }
 
 @media screen and (max-width: 330px) {

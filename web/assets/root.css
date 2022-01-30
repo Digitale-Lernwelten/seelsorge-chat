@@ -170,18 +170,18 @@ h2 {
 }
 
 h2 {
-  font-size: 4.5rem;
+  font-size: 5rem;
 }
 
 h3 {
   font-family: var(--main-heading);
-  font-size: 1.8rem;
+  font-size: 3rem;
   margin-block-start: 0;
 }
 
 h4 {
   font-family: var(--main-h3);
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   margin-block-start: 0;
   margin-block-end: 0.7em;
 }
