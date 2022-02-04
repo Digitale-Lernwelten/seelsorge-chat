@@ -9,12 +9,13 @@ async function privacyDisclaimer() {
 		const currentDay = new Date().getDay();
 		const today = new Date();
 		const currentTime = (today.getHours() * 100) + today.getMinutes();
-		if (currentDay >= 1 && currentDay <= 5) {
-			if (currentTime >= 1545 && currentTime <= 1930) {
-				return true;
-			}
-			return false;
-		}
+//		if (currentDay >= 1 && currentDay <= 5) {
+//			if (currentTime >= 1545 && currentTime <= 1930) {
+//				return true;
+//			}
+//			return false;
+//		}
+		return true;
 	};
 
 	//add script
@@ -37,12 +38,10 @@ async function privacyDisclaimer() {
 				if (await getFreeSlots()) {
 					addScript();
 				} else {
-					// noSlots.classList.add("show");
-					addScript();
+					noSlots.classList.add("show");
 				}
 			} else {
-				// outOfService.classList.add("active");
-				addScript();
+				outOfService.classList.add("active");
 			}
 			return;
 		};
