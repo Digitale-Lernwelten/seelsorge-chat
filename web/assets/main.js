@@ -21,10 +21,10 @@ async function privacyDisclaimer() {
 	
 	const addScript = () => {
 		let script = document.createElement("script");
-		// script.setAttribute('src', 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/312f12586e214ec29e39002ead86655719beb0d14edc4a278a3ed623a56da65a.js');
-		document.head.appendChild(script);
+		script.setAttribute('src', 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/312f12586e214ec29e39002ead86655719beb0d14edc4a278a3ed623a56da65a.js');
 		script.async = true;
-        script.setAttribute('src', 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/ee158a48c0cc44ceaca5fe7ae3366ad05f2334f12c3644f295f739f0be9038ed.js');
+       // script.setAttribute('src', 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/ee158a48c0cc44ceaca5fe7ae3366ad05f2334f12c3644f295f739f0be9038ed.js');
+		document.head.appendChild(script);
 	}
 
 
