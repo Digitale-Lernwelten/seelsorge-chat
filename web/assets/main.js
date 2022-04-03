@@ -1,107 +1,28 @@
-async function privacyDisclaimer() {
-	const cookies = document.cookie.split(";");
-	const accept = document.querySelector("#accept");
-	const decline = document.querySelector("#decline");
-	const cookieYear = new Date().getFullYear() + 1;
-	const outOfService = document.querySelector(".service-time");
-	const noSlots = document.querySelector(".no-slots");
-	const serviceTime = () => {
+const serviceTime = () => {
 		const currentDay = new Date().getDay();
 		const today = new Date();
 		const currentTime = (today.getHours() * 100) + today.getMinutes();
-//		if (currentDay >= 1 && currentDay <= 5) {
-//			if (currentTime >= 1545 && currentTime <= 1930) {
-//				return true;
-//			}
-//			return false;
-//		}
-		return true;
-	};
-
-	//add script
-	
-	const addScript = () => {
-		let script = document.createElement("script");
-		script.setAttribute('src', 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/312f12586e214ec29e39002ead86655719beb0d14edc4a278a3ed623a56da65a.js');
-		script.async = true;
-       // script.setAttribute('src', 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/ee158a48c0cc44ceaca5fe7ae3366ad05f2334f12c3644f295f739f0be9038ed.js');
-		document.head.appendChild(script);
-	}
-
-
-	for (let i = 0; i < cookies.length; i++) {
-		let cookie = cookies[i];
-		let eqPos = cookie.indexOf("=");
-		let name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie;
-		if (name.indexOf("soulchat-allow") > -1) {
-			if (serviceTime() === true) {
-				if (await getFreeSlots()) {
-					addScript();
-				} else {
-					noSlots.classList.add("show");
-				}
-			} else {
-				outOfService.classList.add("active");
+		/* Service Time
+		if (currentDay >= 1 && currentDay <= 5) {
+			if (currentTime >= 1545 && currentTime <= 1930) {
+				return true;
 			}
-			return;
-		};
-		if (name.indexOf("soulchat-denied") > -1) {
-			return;
-		};
-	};
-	const banner = document.querySelector(".privacy-disclaimer");
-	banner.classList.add("show");
-	accept.onclick = function () {
-		banner.classList.toggle("show");
-		document.cookie = `soulchat-allow= allow; expires=Thu, 18 Dec ${cookieYear} 12:00:00 UTC; path=/; Secure`;
-		location.reload();
-		return;
-	};
-	const denyCookies = () => {
-		const banner = document.createElement("DIV");
-		const buttons = document.createElement("DIV");
-		const wrapper = document.createElement("DIV");
-		const acceptButton = document.createElement("BUTTON");
-		const declineButton = document.createElement("BUTTON");
-		const body = document.querySelector("body");
-		wrapper.setAttribute("class", "margin-wrap");
-		buttons.setAttribute("class", "buttons");
-		acceptButton.setAttribute("id", "denial-banner-accept");
-		declineButton.setAttribute("id", "denial-banner-decline");
-		banner.setAttribute("id", "cookies-denial-banner");
-		acceptButton.innerHTML = "Doch zustimmen";
-		declineButton.innerHTML = "Endgültig ablehnen";
-		wrapper.innerHTML = `<p>Achtung: Du kannst den Chat nur nutzen, wenn Du die <a class="link" href="./datenschutz.html">Datenschutzbestimmungen</a> zur Kenntnis nimmst und Cookies akzeptierst.</p>`;
-		buttons.appendChild(acceptButton);
-		buttons.appendChild(declineButton);
-		wrapper.appendChild(buttons);
-		banner.appendChild(wrapper);
-		document.body.append(banner);
-		body.classList.toggle("strong-blur");
-		declineButton.onclick = function () {
-			document.cookie = `soulchat-denied= denied; expires=Thu, 18 Dec ${cookieYear} 12:00:00 UTC; path=/; Secure`;
-			body.classList.toggle("strong-blur");
-			banner.classList.add("hide");
-			return;
+			return false;
 		}
-		acceptButton.onclick = function () {
-			document.cookie = `soulchat-allow= allow; expires=Thu, 18 Dec ${cookieYear} 12:00:00 UTC; path=/; Secure`;
-			body.classList.toggle("strong-blur");
-			location.reload();
-			return;
-		}
+		*/
+		return true;
+}
+
+const toggleBehaviour = () => {
+	const outOfService = document.querySelector(".service-time");
+	const noSlots = document.querySelector(".no-slots");
+	if (serviceTime() === false) {
+		outOfService.classList.add("active");
+	} else if (await getFreeSlots() === 0) {
+		noSlots.classList.add("show");
 	}
-	decline.onclick = function () {
-		banner.classList.toggle("show");
-		denyCookies();
-	};
-};
-
-
-document.addEventListener('DOMContentLoaded', function () {
-	setTimeout(privacyDisclaimer, 0);
-});
-
+}
+setTimeout(toggleBehaviour, 0);
 
 function mobileMenu() {
 	const menu = document.querySelector(".mobile-menu");
@@ -114,7 +35,7 @@ function mobileMenu() {
 		body.classList.toggle("blur");
 		servicePopUp.classList.toggle("blur");
 	};
-};
+}
 setTimeout(mobileMenu, 0);
 
 
@@ -131,19 +52,18 @@ function faqBox() {
 			}
 		});
 	});
-};
+}
 setTimeout(faqBox, 0);
 
-function deleteCookies() {
+const deleteCookies = () => {
 	const cookies = document.cookie.split(";");
-	for (let i = 0; i < cookies.length; i++) {
-		let cookie = cookies[i];
+	cookies.forEach(cookie => {
 		let eqPos = cookie.indexOf("=");
 		let name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie;
 		if (name.indexOf("uslk") > -1) {
 			document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 		}
-	}
+	});
 }
 setTimeout(deleteCookies, 0);
 
@@ -173,4 +93,4 @@ const getFreeSlots = async () => {
 	} else {
 		return 0;
 	}
-};
+}
