@@ -11,8 +11,16 @@ const serviceTime = () => {
 		return true;
 }
 
-async function toggleBehaviour() {
-	const freeSlots = await getFreeSlots();
+function toggleBehaviour() {
+	async function freeSlots() {
+		try { return await getFreeSlots()}
+		catch (e) {
+			console.log("Can't fetch Operatordata");
+			console.log(e);
+			return 0;
+		}
+	} 
+	freeSlots();
 	const outOfService = document.querySelector(".service-time");
 	const noSlots = document.querySelector(".no-slots");
 	if (serviceTime() === false) {
