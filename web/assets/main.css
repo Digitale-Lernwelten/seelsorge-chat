@@ -332,7 +332,7 @@ Service Time
 ***********************/
 
 div.service-time {
-	z-index: 2147483647;
+	z-index: 9999;
 	position: fixed;
 	box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 20px 0px;
 	left: auto;
@@ -556,7 +556,7 @@ Userlike Chat Widget
 *********************************/
 
 div.no-slots {
-	z-index: 2147483647;
+	z-index: 9999;
 	display: none;
 	position: fixed;
 	box-shadow: rgba(0, 0, 0, 0.24) 0px 8px 20px 0px;
