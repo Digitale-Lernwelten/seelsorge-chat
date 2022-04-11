@@ -3,13 +3,14 @@ const serviceTime = () => {
 		const today = new Date();
 		const currentTime = (today.getHours() * 100) + today.getMinutes();
 		if (currentDay >= 1 && currentDay <= 5) {
-			if (currentTime >= 1545 && currentTime <= 1930) {
+			if (currentTime >= 1555 && currentTime <= 1855) {
 				return true;
 			}
 			return false;
 		}
 		return true;
 }
+setTimeout(serviceTime, 0);
 
 function toggleBehaviour() {
 	async function freeSlots() {
