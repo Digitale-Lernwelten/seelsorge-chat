@@ -6,9 +6,8 @@ const serviceTime = () => {
 			if (currentTime >= 1555 && currentTime <= 1855) {
 				return true;
 			}
-			return false;
 		}
-		return true;
+		return false;
 }
 setTimeout(serviceTime, 0);
 
