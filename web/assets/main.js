@@ -11,7 +11,7 @@ const serviceTime = () => {
 }
 setTimeout(serviceTime, 0);
 
-function toggleBehaviour() {
+async function toggleBehaviour() {
 	async function freeSlots() {
 		try { return await getFreeSlots()}
 		catch (e) {
@@ -20,12 +20,12 @@ function toggleBehaviour() {
 			return 0;
 		}
 	} 
-	freeSlots();
+	const slots = await freeSlots();
 	const outOfService = document.querySelector(".service-time");
 	const noSlots = document.querySelector(".no-slots");
 	if (serviceTime() === false) {
 		outOfService.classList.add("active");
-	}else if (freeSlots === 0) {
+	}else if (slots === 0) {
 		noSlots.classList.add("show");
 	}
 }
