@@ -1,93 +1,142 @@
-const serviceTime = () => {
-		const currentDay = new Date().getDay();
-		const today = new Date();
-		const currentTime = (today.getHours() * 100) + today.getMinutes();
-		if (currentDay >= 1 && currentDay <= 5) {
-			if (currentTime >= 1555 && currentTime <= 1855) {
-				return true;
-			}
-		}
-		return false;
+// Force HTTPS
+// const BASE_URL = "http://localhost:1234"
+const BASE_URL = "https://seelsorge-chat.de"
+if (window.location.protocol === "http:") {
+    window.location = BASE_URL + window.location.pathname;
 }
-setTimeout(serviceTime, 0);
+
+const IS_DEBUG = false;
+
+const debugLog = (...message) => {
+    if (IS_DEBUG) {
+        console.log("[DEBUG]::", ...message);
+    }
+}
+
+const TIMEFRAME = {
+    start: 1555,
+    end: 1855
+}
+
+const MONDAY = 1;
+const FRIDAY = 5;
+
+/**
+ * @param {number} val 
+ * @param {number} min 
+ * @param {number} max 
+ * @returns 
+ */
+const inRange = (val, min, max) => val >= min && val <= max;
+
+
+const serviceTime = () => {
+    const now = new Date();
+    const currentDay = now.getDay();
+    const currentHour = now.getHours() * 100;
+    const currentMinutes = now.getMinutes();
+    const currentTime = currentHour + currentMinutes;
+    return inRange(currentDay, MONDAY, FRIDAY) && inRange(currentTime, TIMEFRAME.start, TIMEFRAME.end);
+}
 
 async function toggleBehaviour() {
-	async function freeSlots() {
-		try { return await getFreeSlots()}
-		catch (e) {
-			console.log("Can't fetch Operatordata");
-			console.log(e);
-			return 0;
-		}
-	} 
-	const slots = await freeSlots();
-	const outOfService = document.querySelector(".service-time");
-	const noSlots = document.querySelector(".no-slots");
-	if (serviceTime() === false) {
-		outOfService.classList.add("active");
-	}else if (slots === 0) {
-		noSlots.classList.add("show");
-	}
+    async function freeSlots() {
+        try { 
+            return await getFreeSlots();
+        }
+        catch (e) {
+            console.log("Can't fetch Operatordata");
+            console.log(e);
+            return 0;
+        }
+    }
+
+    const slots = await freeSlots();
+    debugLog(`${slots} slots available`);
+    const outOfService = document.querySelector(".service-time");
+    const noSlots = document.querySelector(".no-slots");
+    if (serviceTime() === false) {
+        debugLog("outside of timeframe")
+        outOfService.classList.add("active");
+    } else if (slots === 0) {
+        noSlots.classList.add("show");
+    }
 }
 setTimeout(toggleBehaviour, 0);
 
-function mobileMenu() {
-	const menu = document.querySelector(".mobile-menu");
-	const items = document.querySelector(".nav-items");
-	const body = document.querySelector("body");
-	const servicePopUp = document.querySelector(".service-time");
-	menu.onclick = function () {
-		menu.classList.toggle("change");
-		items.classList.toggle("open");
-		body.classList.toggle("blur");
-		servicePopUp.classList.toggle("blur");
-	};
-}
-setTimeout(mobileMenu, 0);
-
-
-function faqBox() {
-	const acc = document.querySelectorAll(".accordion");
-	acc.forEach(ele => {
-		ele.addEventListener("click", function () {
-			this.classList.toggle("active");
-			var panel = this.nextElementSibling;
-			if (panel.style.maxHeight) {
-				panel.style.maxHeight = null;
-			} else {
-				panel.style.maxHeight = panel.scrollHeight + "px";
-			}
-		});
-	});
-}
-setTimeout(faqBox, 0);
-
 const deleteCookies = () => {
-	const cookies = document.cookie.split(";");
-	cookies.forEach(cookie => {
-		let eqPos = cookie.indexOf("=");
-		let name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie;
-		if (name.indexOf("uslk") > -1) {
-			document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-		}
-	});
+    const cookies = document.cookie.split(";");
+    cookies.forEach(cookie => {
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie;
+        if (name.indexOf("uslk") > -1) {
+            document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+    });
 }
 setTimeout(deleteCookies, 0);
 
-window.onscroll = function () {
-	const outOfService = document.querySelector(".service-time");
-	const noSlots = document.querySelector(".no-slots");
-	if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-		outOfService.classList.add("offset");
-		noSlots.classList.add("offset");
-	} else {
-		outOfService.classList.remove("offset");
-		noSlots.classList.remove("offset");
-	}
+function mobileMenu() {
+    const menu = document.querySelector(".mobile-menu");
+    const items = document.querySelector(".nav-items");
+    const body = document.querySelector("body");
+    const servicePopUp = document.querySelector(".service-time");
+    menu.onclick = () => {
+        menu.classList.toggle("change");
+        items.classList.toggle("open");
+        body.classList.toggle("blur");
+        servicePopUp.classList.toggle("blur");
+    }
 }
+setTimeout(mobileMenu, 0);
+
+function faqBox() {
+    const acc = document.querySelectorAll(".accordion");
+    acc.forEach(ele => {
+        ele.addEventListener("click", () => {
+            this.classList.toggle("active");
+            const panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = `${panel.scrollHeight}px`;
+            }
+        })
+    });
+}
+setTimeout(faqBox, 0);
+
+function typeText() {
+    const heading = document.querySelector("#animated");
+    const sourceText = heading.innerHTML + ""; // Dadurch erzwingen wir eine Kopie
+    for (let i = 0; i <= sourceText.length; i++) {
+        setTimeout(() => {
+            heading.innerHTML = sourceText.slice(0, i);
+        }, 650 * i);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (document.querySelector("#animated") != null) {
+        setTimeout(typeText, 0);
+    }
+});
+
+window.onscroll = function () {
+    const outOfService = document.querySelector(".service-time");
+    const noSlots = document.querySelector(".no-slots");
+    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
+        outOfService.classList.add("offset");
+        noSlots.classList.add("offset");
+    } else {
+        outOfService.classList.remove("offset");
+        noSlots.classList.remove("offset");
+    }
+}
+
 const getFreeSlots = async () => {
     console.time('operator-fetch')
-    const rawResponse = await fetch('https://seelsorge-chat.de/status.php', {
+    const rawResponse = await fetch(`${BASE_URL}/status.php`, {
         cache: "no-store",
         headers: {
             'Accept': 'application/json',
@@ -106,7 +155,7 @@ const getFreeSlots = async () => {
      * @property {number} content.duration - time it took for the API call on the server in seconds
      */
     const content = await rawResponse.json();
-    console.log(`script execution took: ${content.duration.toFixed(2)}s`);
+    debugLog(`script execution took: ${content.duration.toFixed(2)}s`);
     if (content.usingCache) {
         console.warn('using cached API results');
     }
@@ -117,7 +166,7 @@ const getFreeSlots = async () => {
         console.error(content.error);
     }
     if (content && content.slotsFree) {
-        return content.slotsFree | 0;
+        return content.slotsFree || 0;
     } else {
         return 0;
     }
