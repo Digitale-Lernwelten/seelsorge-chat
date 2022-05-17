@@ -5,7 +5,7 @@ if (window.location.protocol === "http:") {
     window.location = BASE_URL + window.location.pathname;
 }
 
-const IS_DEBUG = false;
+const IS_DEBUG = true;
 
 const debugLog = (...message) => {
     if (IS_DEBUG) {
@@ -55,10 +55,12 @@ async function toggleBehaviour() {
     debugLog(`${slots} slots available`);
     const outOfService = document.querySelector(".service-time");
     const noSlots = document.querySelector(".no-slots");
-    if (serviceTime() === false) {
+    if (!serviceTime()) {
         debugLog("outside of timeframe")
         outOfService.classList.add("active");
     } else if (slots === 0) {
+        debugLog('no slots available');
+        debugLog('showing "no-slots" prompt')
         noSlots.classList.add("show");
     }
 }
@@ -145,15 +147,17 @@ const getFreeSlots = async () => {
     });
     console.timeEnd('operator-fetch');
     /**
-     * @type {Object}
-     * @property {number} content.slotsFree - number of availabe operators
-     * @property {string | null} content.error - optional error during API call
-     * @property {boolean} content.usingCache - if the result is cached or not
-     * @property {number} content.totalOps - total number of operators
-     * @property {number} content.apiCode - UserLike API reply code
-     * @property {string[]} content.warnings - warnings during API call
-     * @property {number} content.duration - time it took for the API call on the server in seconds
+     * @typedef {Object} APIResponse
+     * @property {number} slotsFree - number of availabe operators
+     * @property {string | null} error - optional error during API call
+     * @property {boolean} usingCache - if the result is cached or not
+     * @property {number} totalOps - total number of operators
+     * @property {number} apiCode - UserLike API reply code
+     * @property {string[]} warnings - warnings during API call
+     * @property {number} duration - time it took for the API call on the server in seconds
      */
+
+    /** @type {APIResponse} */
     const content = await rawResponse.json();
     debugLog(`script execution took: ${content.duration.toFixed(2)}s`);
     if (content.usingCache) {
