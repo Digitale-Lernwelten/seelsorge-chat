@@ -20,6 +20,8 @@ const TIMEFRAME = {
 
 const MONDAY = 1;
 const FRIDAY = 5;
+const SUNDAY = 0;
+const SATURDAY = 6;
 
 /**
  * @param {number} val 
@@ -36,7 +38,7 @@ const serviceTime = () => {
     const currentHour = now.getHours() * 100;
     const currentMinutes = now.getMinutes();
     const currentTime = currentHour + currentMinutes;
-    return inRange(currentDay, MONDAY, FRIDAY) && inRange(currentTime, TIMEFRAME.start, TIMEFRAME.end);
+    return inRange(currentDay, SUNDAY, SATURDAY) && inRange(currentTime, TIMEFRAME.start, TIMEFRAME.end);
 }
 
 async function toggleBehaviour() {
