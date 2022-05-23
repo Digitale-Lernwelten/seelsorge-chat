@@ -387,40 +387,6 @@ div.service-icon img {
 	transition: bottom 0.3s;
 }
 
-/********************
-Cookie Banner
-********************/
-
-div.privacy-disclaimer {
-	display: none;
-	position: fixed;
-	bottom: 0;
-	z-index: 999;
-	width: 100%;
-	height: 90%;
-	top: 35%;
-}
-
-div.privacy-disclaimer div.margin-wrap {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #ccc;
-	font-size: 1.2rem;
-	transition: bottom 0.5s;
-	-webkit-box-shadow: 0px 3px 6px #00000029;
-	box-shadow: 0px 3px 6px #00000029;
-	transition: bottom 325ms 1.5s;
-	max-width: 900px;
-	margin: auto;
-	width: 90%;
-	height: 27%;
-	min-height: 300px;
-	max-height: 900px;
-	flex-direction: column;
-	border-radius: 12px;
-}
-
 div#cookies-denial-banner {
 	position: fixed;
 	bottom: 0;
@@ -467,26 +433,6 @@ div#cookies-denial-banner div.buttons {
 	align-items: center;
 	color: var(--orange);
 	margin: 0 auto;
-	width: 90%;
-}
-
-div.privacy-disclaimer.show {
-	display: block;
-	position: fixed;
-	bottom: 0;
-	transition: bottom 325ms 1.5s;
-}
-
-div.privacy-disclaimer div.buttons {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	color: var(--orange);
-	width: 90%;
-}
-
-div.privacy-disclaimer p {
-	margin: 1em auto;
 	width: 90%;
 }
 
