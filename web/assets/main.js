@@ -16,7 +16,7 @@
     debugMode: true,
     probeInterval: 3,
     url: "https://seelsorge-chat.de",
-    enableHTTPSRedirect: false,
+    enableHTTPSRedirect: true,
     serviceTime: {
         time: {
             start: 1555,
