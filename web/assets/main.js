@@ -1,72 +1,139 @@
-// Force HTTPS
-// const BASE_URL = "http://localhost:1234"
-const BASE_URL = "https://seelsorge-chat.de"
-if (window.location.protocol === "http:") {
-    window.location = BASE_URL + window.location.pathname;
+/**
+ * @typedef {Object} config
+ * @property {boolean} debugMode
+ * @property {number} probeInterval
+ * @property {string} url
+ * @property {boolean} enableHTTPSRedirect
+ * @property {Object} serviceTime
+ * @property {Object} serviceTime.time
+ * @property {number} service.time.start
+ * @property {number} service.time.end
+ * @property {Object} serviceTime.day
+ * @property {number} service.day.start
+ * @property {number} service.day.end
+ */
+ const config = {
+    debugMode: true,
+    probeInterval: 3,
+    url: "https://seelsorge-chat.de",
+    enableHTTPSRedirect: true,
+    serviceTime: {
+        time: {
+            start: 1555,
+            end: 1855
+        },
+        day: {
+            start: 0, // sunday
+            end: 6 // saturday
+        }
+    }
 }
 
-const IS_DEBUG = true;
+if (config.enableHTTPSRedirect && window.location.protocol === "http:") {
+    window.location = config.url + window.location.pathname;
+}
+
 
 const debugLog = (...message) => {
-    if (IS_DEBUG) {
+    if (config.debugMode) {
         console.log("[DEBUG]::", ...message);
     }
 }
 
-const TIMEFRAME = {
-    start: 1555,
-    end: 1855
-}
-
-const MONDAY = 1;
-const FRIDAY = 5;
-const SUNDAY = 0;
-const SATURDAY = 6;
+/**
+ * Interval id for checking userlike status.
+ * @type {number|null}
+ */
+let probeId = null;
 
 /**
+ * Check if the given value is within the given range.
  * @param {number} val 
  * @param {number} min 
  * @param {number} max 
- * @returns 
+ * @returns {boolean}
  */
 const inRange = (val, min, max) => val >= min && val <= max;
 
 
-const serviceTime = () => {
+/**
+ * 
+ * @param {HTMLElement} element 
+ * @param {string} className
+ */
+const hasClass = (element, className) => {
+    return element.classList.contains(className);
+}
+
+/**
+ * 
+ * @param {HTMLElement} element 
+ * @param {string} className 
+ */
+const removeClassIfPresent = (element, className) => {
+    if (hasClass(element, className)) {
+        element.classList.remove(className);
+    }
+}
+
+/**
+ * 
+ * @param {number | null} id 
+ */
+const clearIntervalIfPresent = (id) => {
+    if (id) {
+        clearInterval(id);
+    }
+}
+
+/**
+ * Check if the current time is within specified timeframe.
+ * @returns {boolean} true if the current time is within the service time, false otherwise.
+ */
+const isServiceTime = () => {
     const now = new Date();
     const currentDay = now.getDay();
     const currentHour = now.getHours() * 100;
     const currentMinutes = now.getMinutes();
     const currentTime = currentHour + currentMinutes;
-    return inRange(currentDay, SUNDAY, SATURDAY) && inRange(currentTime, TIMEFRAME.start, TIMEFRAME.end);
+    const { time, day } = config.serviceTime;
+    const isCorrectDay = inRange(currentDay, day.start, day.end);
+    const isCorrectTime = inRange(currentTime, time.start, time.end);
+    return isCorrectDay && isCorrectTime;
 }
 
-async function toggleBehaviour() {
-    async function freeSlots() {
-        try { 
-            return await getFreeSlots();
-        }
-        catch (e) {
-            console.log("Can't fetch Operatordata");
-            console.log(e);
-            return 0;
-        }
-    }
 
-    const slots = await freeSlots();
-    debugLog(`${slots} slots available`);
-    const outOfService = document.querySelector(".service-time");
-    const noSlots = document.querySelector(".no-slots");
-    if (!serviceTime()) {
-        debugLog("outside of timeframe")
-        outOfService.classList.add("active");
-    } else if (slots === 0) {
-        debugLog('no slots available');
-        debugLog('showing "no-slots" prompt')
-        noSlots.classList.add("show");
+const detectUserLike = () => {
+    const serviceTime = document.getElementById("service-time-window");
+    const noSlots = document.getElementById("no-slots-window");
+    if (!serviceTime || !serviceTime) {
+        console.error("failed to find required modals");
+    }
+    if (!isServiceTime()) {
+        serviceTime.classList.add("active");
+        clearIntervalIfPresent(probeId);
+        debugLog("outside of service time");
+    }
+    const nodes = document.querySelectorAll("*[id^=\"userlike\"]");
+    if (nodes.length > 0) {
+        clearIntervalIfPresent(probeId);
+        debugLog("found userlike components");
+        const userLikeDiv = Array.from(nodes).find(n => n.tagName === "DIV");
+        if (userLikeDiv) {
+            debugLog("found userlike div");
+            if (userLikeDiv.childElementCount === 0) {
+                debugLog("no operators available");
+                removeClassIfPresent(serviceTime, "active");
+                noSlots.classList.add("show");
+            } else {
+                removeClassIfPresent(serviceTime, "active");
+                removeClassIfPresent(noSlots, "show");
+                debugLog("online");
+            }
+        }
     }
 }
-setTimeout(toggleBehaviour, 0);
+
 
 const deleteCookies = () => {
     const cookies = document.cookie.split(";");
@@ -78,9 +145,8 @@ const deleteCookies = () => {
         }
     });
 }
-setTimeout(deleteCookies, 0);
 
-function mobileMenu() {
+const mobileMenu = () => {
     const menu = document.querySelector(".mobile-menu");
     const items = document.querySelector(".nav-items");
     const body = document.querySelector("body");
@@ -92,9 +158,8 @@ function mobileMenu() {
         servicePopUp.classList.toggle("blur");
     }
 }
-setTimeout(mobileMenu, 0);
 
-function faqBox() {
+const faqBox = () => {
     const acc = document.querySelectorAll(".accordion");
     acc.forEach(ele => {
         ele.addEventListener("click", () => {
@@ -108,9 +173,8 @@ function faqBox() {
         })
     });
 }
-setTimeout(faqBox, 0);
 
-function typeText() {
+const typeText = () => {
     const heading = document.querySelector("#animated");
     const sourceText = heading.innerHTML + ""; // Dadurch erzwingen wir eine Kopie
     for (let i = 0; i <= sourceText.length; i++) {
@@ -124,6 +188,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.querySelector("#animated") != null) {
         setTimeout(typeText, 0);
     }
+    detectUserLike();
+    probeId = setInterval(detectUserLike, config.probeInterval * 1000);
+    deleteCookies();
+    mobileMenu();
+    faqBox();
 });
 
 window.onscroll = function () {
@@ -135,45 +204,5 @@ window.onscroll = function () {
     } else {
         outOfService.classList.remove("offset");
         noSlots.classList.remove("offset");
-    }
-}
-
-const getFreeSlots = async () => {
-    console.time('operator-fetch')
-    const rawResponse = await fetch(`${BASE_URL}/status.php`, {
-        cache: "no-store",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    });
-    console.timeEnd('operator-fetch');
-    /**
-     * @typedef {Object} APIResponse
-     * @property {number} slotsFree - number of availabe operators
-     * @property {string | null} error - optional error during API call
-     * @property {boolean} usingCache - if the result is cached or not
-     * @property {number} totalOps - total number of operators
-     * @property {number} apiCode - UserLike API reply code
-     * @property {string[]} warnings - warnings during API call
-     * @property {number} duration - time it took for the API call on the server in seconds
-     */
-
-    /** @type {APIResponse} */
-    const content = await rawResponse.json();
-    debugLog(`script execution took: ${content.duration.toFixed(2)}s`);
-    if (content.usingCache) {
-        console.warn('using cached API results');
-    }
-    content.warnings.forEach(warning => {
-        console.warn(warning);
-    });
-    if (content.error !== null) {
-        console.error(content.error);
-    }
-    if (content && content.slotsFree) {
-        return content.slotsFree || 0;
-    } else {
-        return 0;
     }
 }
