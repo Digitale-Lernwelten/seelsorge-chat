@@ -29,6 +29,10 @@
     }
 }
 
+let noSlotsModal = null;
+let serviceTimeModal = null;
+let loadModal = null;
+
 if (config.enableHTTPSRedirect && window.location.protocol === "http:") {
     window.location = config.url + window.location.pathname;
 }
@@ -103,16 +107,34 @@ const isServiceTime = () => {
 }
 
 
+const showLoadHint = () => {
+    removeClassIfPresent(serviceTimeModal, "active");
+    removeClassIfPresent(noSlotsModal, "show");
+    loadModal.classList.add("show");
+}
+
+const showServiceTimeHint = () => {
+    removeClassIfPresent(loadModal, "show");
+    removeClassIfPresent(noSlotsModal, "show");
+    serviceTimeModal.classList.add("active");
+}
+
+const showNoSlotsHint = () => {
+    removeClassIfPresent(serviceTimeModal, "active");
+    removeClassIfPresent(loadModal, "show");
+    noSlotsModal.classList.add("show");
+}
+
 const detectUserLike = () => {
-    const serviceTime = document.getElementById("service-time-window");
-    const noSlots = document.getElementById("no-slots-window");
-    if (!serviceTime || !serviceTime) {
+    if (!serviceTimeModal || !noSlotsModal || !loadModal) {
         console.error("failed to find required modals");
     }
     if (!isServiceTime()) {
-        serviceTime.classList.add("active");
+        showServiceTimeHint();
         clearIntervalIfPresent(probeId);
         debugLog("outside of service time");
+    } else {
+        showLoadHint();
     }
     const nodes = document.querySelectorAll("*[id^=\"userlike\"]");
     if (nodes.length > 0) {
@@ -123,11 +145,11 @@ const detectUserLike = () => {
             debugLog("found userlike div");
             if (userLikeDiv.childElementCount === 0) {
                 debugLog("no operators available");
-                removeClassIfPresent(serviceTime, "active");
-                noSlots.classList.add("show");
+                showNoSlotsHint();
             } else {
-                removeClassIfPresent(serviceTime, "active");
-                removeClassIfPresent(noSlots, "show");
+                removeClassIfPresent(loadModal, "show");
+                removeClassIfPresent(serviceTimeModal, "active");
+                removeClassIfPresent(noSlotsModal, "show");
                 debugLog("online");
             }
         }
@@ -184,7 +206,10 @@ const typeText = () => {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
+    serviceTimeModal = document.getElementById("service-time-window");
+    noSlotsModal = document.getElementById("no-slots-window");
+    loadModal = document.getElementById("load-hint-window");
     if (document.querySelector("#animated") != null) {
         setTimeout(typeText, 0);
     }
@@ -195,14 +220,14 @@ document.addEventListener('DOMContentLoaded', function () {
     faqBox();
 });
 
-window.onscroll = function () {
-    const outOfService = document.querySelector(".service-time");
-    const noSlots = document.querySelector(".no-slots");
+window.onscroll = () => {
     if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-        outOfService.classList.add("offset");
-        noSlots.classList.add("offset");
+        serviceTimeModal.classList.add("offset");
+        noSlotsModal.classList.add("offset");
+        loadModal.classList.add("offset");
     } else {
-        outOfService.classList.remove("offset");
-        noSlots.classList.remove("offset");
+        removeClassIfPresent(serviceTimeModal, "offset");
+        removeClassIfPresent(loadModal, "offset");
+        removeClassIfPresent(noSlotsModal, "offset");
     }
 }
