@@ -1,12 +1,18 @@
 {
   "name": "seelsorge-chat",
   "version": "1.0.0",
-  "main": "/assets/main.js",
   "repository": "git@github.com:Digitale-Lernwelten/seelsorge-chat.git",
   "author": "paetzenstein <paetzenstein@mailbox.org>",
   "license": "MIT",
   "private": null,
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "start": "parcel ./web/*.html",
+    "build": "parcel build ./web/*.html"
+  },
   "devDependencies": {
+    "@parcel/packager-raw-url": "2.6.0",
+    "@parcel/transformer-webmanifest": "2.6.0",
     "parcel": "^2.6.0",
     "rxjs": "^7.5.5"
   },
