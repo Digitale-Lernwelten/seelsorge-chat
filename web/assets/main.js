@@ -14,7 +14,8 @@
  */
  const config = {
     debugMode: true,
-    probeInterval: 3,
+    probeInterval: 250,
+    additionalOfflineChecks: 15,
     url: "https://seelsorge-chat.de",
     enableHTTPSRedirect: true,
     serviceTime: {
@@ -86,6 +87,7 @@ const removeClassIfPresent = (element, className) => {
  */
 const clearIntervalIfPresent = (id) => {
     if (id) {
+        debugLog(`cancelling interval: ${id}`);
         clearInterval(id);
     }
 }
@@ -125,6 +127,9 @@ const showNoSlotsHint = () => {
     noSlotsModal.classList.add("show");
 }
 
+let checks = 0;
+let offlineRuns = 0;
+
 const detectUserLike = () => {
     if (!serviceTimeModal || !noSlotsModal || !loadModal) {
         console.error("failed to find required modals");
@@ -136,23 +141,27 @@ const detectUserLike = () => {
     } else {
         showLoadHint();
     }
-    const nodes = document.querySelectorAll("*[id^=\"userlike\"]");
+    const nodes = Array.from(document.querySelectorAll("div[id^=\"userlike-\"]"));
     if (nodes.length > 0) {
-        clearIntervalIfPresent(probeId);
-        debugLog("found userlike components");
-        const userLikeDiv = Array.from(nodes).find(n => n.tagName === "DIV");
-        if (userLikeDiv) {
-            debugLog("found userlike div");
-            if (userLikeDiv.childElementCount === 0) {
-                debugLog("no operators available");
-                showNoSlotsHint();
-            } else {
-                removeClassIfPresent(loadModal, "show");
-                removeClassIfPresent(serviceTimeModal, "active");
-                removeClassIfPresent(noSlotsModal, "show");
-                debugLog("online");
-            }
+        const userLikeDiv = nodes[0];
+        debugLog("found userlike div");
+        if (userLikeDiv.childElementCount === 0) {
+            offlineRuns++;
+            debugLog("no operators available");
+            showNoSlotsHint();
+        } else {
+            removeClassIfPresent(loadModal, "show");
+            removeClassIfPresent(serviceTimeModal, "active");
+            removeClassIfPresent(noSlotsModal, "show");
+            debugLog("detected children in userlike element");
+            clearIntervalIfPresent(probeId);
         }
+    }
+    debugLog(`check: ${checks} offline: ${offlineRuns}`);
+    checks++;
+    if (offlineRuns === config.additionalOfflineChecks) {
+        debugLog(`exceeded maximum checks`);
+        clearIntervalIfPresent(probeId);
     }
 }
 
@@ -214,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(typeText, 0);
     }
     detectUserLike();
-    probeId = setInterval(detectUserLike, config.probeInterval * 1000);
+    probeId = setInterval(detectUserLike, config.probeInterval);
     deleteCookies();
     mobileMenu();
     faqBox();
