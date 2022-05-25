@@ -1,0 +1,16 @@
+{
+  "name": "seelsorge-chat",
+  "version": "1.0.0",
+  "main": "/assets/main.js",
+  "repository": "git@github.com:Digitale-Lernwelten/seelsorge-chat.git",
+  "author": "paetzenstein <paetzenstein@mailbox.org>",
+  "license": "MIT",
+  "private": null,
+  "devDependencies": {
+    "parcel": "^2.6.0",
+    "rxjs": "^7.5.5"
+  },
+  "dependencies": {
+    "@userlike/messenger": "^1.2.3"
+  }
+}
