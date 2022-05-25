@@ -34,9 +34,11 @@ let noSlotsModal = null;
 let serviceTimeModal = null;
 let loadModal = null;
 
+
 if (config.enableHTTPSRedirect && window.location.protocol === "http:") {
     window.location = config.url + window.location.pathname;
 }
+
 
 
 const debugLog = (...message) => {
@@ -194,8 +196,8 @@ const faqBox = () => {
     const acc = document.querySelectorAll(".accordion");
     acc.forEach(ele => {
         ele.addEventListener("click", () => {
-            this.classList.toggle("active");
-            const panel = this.nextElementSibling;
+            ele.classList.toggle("active");
+            const panel = ele.nextElementSibling;
             if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
             } else {
