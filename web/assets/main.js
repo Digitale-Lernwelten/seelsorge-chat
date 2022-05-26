@@ -1,3 +1,6 @@
+import * as Rx from "rxjs";
+import * as $ from "rxjs/operators";
+import { createMessenger, v1 } from "@userlike/messenger";
 /**
  * @typedef {Object} config
  * @property {boolean} debugMode
@@ -34,10 +37,11 @@ let noSlotsModal = null;
 let serviceTimeModal = null;
 let loadModal = null;
 
-
+/*
 if (config.enableHTTPSRedirect && window.location.protocol === "http:") {
     window.location = config.url + window.location.pathname;
 }
+*/
 
 
 
@@ -93,6 +97,70 @@ const clearIntervalIfPresent = (id) => {
         clearInterval(id);
     }
 }
+
+/**
+ * Creating Userlike Button 
+ *  
+ */
+
+async function createApi() {
+  const result = await createMessenger({
+    version: 1,
+    widgetKey: "be544462ac3f48f384d1395d4ceafcc4d902b06e7bfc48159f413ee89696416f",
+  });
+
+  if (result.kind === "error") throw new Error(result.error);
+
+  const { api } = result.value;
+
+  if (api === null) {
+    throw new Error(
+      "api reached end-of-life, please check documentation and upgrade."
+    );
+  }
+
+  return api;
+}
+
+console.log(createApi);
+
+const userlike = createApi();
+
+userlike.then(
+    messenger => messenger.mount()
+        .then(() => messenger.setVisibility({
+            main: true,
+            button: true,
+            notifications: true,
+        }))
+);
+const startChat = () => {
+    userlike.then(m => m.maximize());
+}
+
+const scrollDepth = () => {
+    return document.documentElement.scrollTop;
+}
+
+let callCounter = 0;
+window.addEventListener("scroll", function () {
+    if (scrollDepth() > 50 && callCounter < 1) {
+        userlike.then(messenger => messenger.maximize())
+        callCounter += 1;
+    }
+}, false)
+
+/**
+ * Listen to APi changes
+ */
+
+const foo = Rx.pipe(
+  userlike.state$,
+  $.filter(({ state }) => state !== v1.MessengerState.Hidden)
+);
+
+console.log(foo);
+
 
 /**
  * Check if the current time is within specified timeframe.
