@@ -18,6 +18,8 @@
     additionalOfflineChecks: 15,
     url: "https://seelsorge-chat.de",
     enableHTTPSRedirect: true,
+    consentKey: "seelsorge-consent",
+    userLikeWidgetURL: "https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/312f12586e214ec29e39002ead86655719beb0d14edc4a278a3ed623a56da65a.js",
     serviceTime: {
         time: {
             start: 1555,
@@ -30,9 +32,22 @@
     }
 }
 
+/** @type {HTMLElement} */
 let noSlotsModal = null;
+/** @type {HTMLElement} */
 let serviceTimeModal = null;
+/** @type {HTMLElement} */
 let loadModal = null;
+/** @type {HTMLElement} */
+let privacyModal = null;
+/** @type {HTMLButtonElement} */
+let privacyAccept = null;
+/** @type {HTMLButtonElement} */
+let privacyDecline = null;
+/** @type {HTMLElement} */
+let declinedPrivacyModal = null;
+/** @type {HTMLButtonElement} */
+let declinedPrivacyModalButton = null;
 
 if (config.enableHTTPSRedirect && window.location.protocol === "http:") {
     window.location = config.url + window.location.pathname;
@@ -47,7 +62,7 @@ const debugLog = (...message) => {
 
 /**
  * Interval id for checking userlike status.
- * @type {number|null}
+ * @type {number}
  */
 let probeId = null;
 
@@ -62,7 +77,7 @@ const inRange = (val, min, max) => val >= min && val <= max;
 
 
 /**
- * 
+ * Check if the given element has the given CSS class.
  * @param {HTMLElement} element 
  * @param {string} className
  */
@@ -71,7 +86,7 @@ const hasClass = (element, className) => {
 }
 
 /**
- * 
+ * Remove the given CSS class from the given element if present.
  * @param {HTMLElement} element 
  * @param {string} className 
  */
@@ -82,7 +97,18 @@ const removeClassIfPresent = (element, className) => {
 }
 
 /**
- * 
+ * Add the given class to the element if not set.
+ * @param {HTMLElement} element 
+ * @param {string} className 
+ */
+const addClass = (element, className) => {
+    if (!hasClass(element, className)) {
+        element.classList.add(className);
+    }
+}
+
+/**
+ * Clear/stop the given interval if it exists.
  * @param {number | null} id 
  */
 const clearIntervalIfPresent = (id) => {
@@ -109,30 +135,94 @@ const isServiceTime = () => {
 }
 
 
+/**
+ * Show the hint that the chat status is loading.
+ * Hides all other modals.
+ */
 const showLoadHint = () => {
     removeClassIfPresent(serviceTimeModal, "active");
     removeClassIfPresent(noSlotsModal, "show");
-    loadModal.classList.add("show");
+    removeClassIfPresent(declinedPrivacyModal, "show");
+    addClass(loadModal, "show");
 }
 
+/**
+ * Show the hint that it isn't that service time.
+ * Hides all other modals.
+ */
 const showServiceTimeHint = () => {
     removeClassIfPresent(loadModal, "show");
     removeClassIfPresent(noSlotsModal, "show");
-    serviceTimeModal.classList.add("active");
+    removeClassIfPresent(declinedPrivacyModal, "show");
+    addClass(serviceTimeModal, "active");
 }
 
+/**
+ * Show the hint that the chat is full.
+ * Hides all other modals.
+ */
 const showNoSlotsHint = () => {
     removeClassIfPresent(serviceTimeModal, "active");
     removeClassIfPresent(loadModal, "show");
-    noSlotsModal.classList.add("show");
+    removeClassIfPresent(declinedPrivacyModal, "show");
+    addClass(noSlotsModal, "show");
+}
+
+/**
+ * Show the hint that the user has declined the privacy prompt within the fullscreen modal.
+ * Hides all other modals.
+ */
+const showDeclinedPrivacyHint = () => {
+    removeClassIfPresent(serviceTimeModal, "active");
+    removeClassIfPresent(loadModal, "show");
+    removeClassIfPresent(noSlotsModal, "show");
+    addClass(declinedPrivacyModal, "show");
+}
+
+const hideAllModals = () => {
+    [
+        [serviceTimeModal, "active"],
+        [loadModal, "show"],
+        [noSlotsModal, "show"],
+        [declinedPrivacyModal, "show"],
+    ].forEach(([element, className]) => {
+        removeClassIfPresent(element, className);
+    })
+    debugLog("hidden all custom modals");
+}
+
+/**
+ * Set the 'display' style value of the given element to 'block'.
+ * @param {HTMLElement} element 
+ */
+const showElement = (element) => {
+    element.style.display = "block";
+}
+
+/**
+ * Set the 'display' style value of the given element to 'none'.
+ * @param {HTMLElement} element 
+ */
+const hideElement = (element) => {
+    element.style.display = "none";
 }
 
 let checks = 0;
 let offlineRuns = 0;
 
+/**
+ * Check the DOM for the userlike element. Userlike appends a div with the id
+ * 'userlike-XXXXX' to the body. Check until the div was found.
+ * If the div has children, an operator is available so we hide all our own modals.
+ * If the div has no children, no operator is available so we show no-slots modal @see {@link showNoSlotsHint}
+ * The detection runs a specified amount iterations after the div was detected to avoid any race-conditions
+ * where an operator is available, we detect the div but the userlike code has not yet attached
+ * any elements to the div.
+ */
 const detectUserLike = () => {
     if (!serviceTimeModal || !noSlotsModal || !loadModal) {
         console.error("failed to find required modals");
+        return;
     }
     if (!isServiceTime()) {
         showServiceTimeHint();
@@ -150,9 +240,7 @@ const detectUserLike = () => {
             debugLog("no operators available");
             showNoSlotsHint();
         } else {
-            removeClassIfPresent(loadModal, "show");
-            removeClassIfPresent(serviceTimeModal, "active");
-            removeClassIfPresent(noSlotsModal, "show");
+            hideAllModals();
             debugLog("detected children in userlike element");
             clearIntervalIfPresent(probeId);
         }
@@ -193,15 +281,15 @@ const mobileMenu = () => {
 const faqBox = () => {
     const acc = document.querySelectorAll(".accordion");
     acc.forEach(ele => {
-        ele.addEventListener("click", () => {
-            this.classList.toggle("active");
-            const panel = this.nextElementSibling;
+        ele.onclick = () => {
+            ele.classList.toggle("active");
+            const panel = ele.nextElementSibling;
             if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
             } else {
                 panel.style.maxHeight = `${panel.scrollHeight}px`;
             }
-        })
+        }
     });
 }
 
@@ -215,15 +303,64 @@ const typeText = () => {
     }
 }
 
+const embedUserLike = () => {
+    const userLikeScript = document.createElement("script");
+    userLikeScript.async = true;
+    userLikeScript.type = "text/javascript";
+    userLikeScript.src = config.userLikeWidgetURL;
+    document.body.append(userLikeScript);
+    debugLog("embedded userlike script");
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     serviceTimeModal = document.getElementById("service-time-window");
     noSlotsModal = document.getElementById("no-slots-window");
     loadModal = document.getElementById("load-hint-window");
+    privacyModal = document.getElementById("privacy-window");
+    privacyAccept = document.getElementById("accept");
+    privacyDecline = document.getElementById("decline");
+    declinedPrivacyModal = document.getElementById("declined-privacy-window");
+    declinedPrivacyModalButton = document.getElementById("declined-accept");
+
+    const consentValue = localStorage.getItem(config.consentKey);
+    // no stored value => first time visit => show fullscreen prompt
+    if (consentValue === null) {
+        showElement(privacyModal);
+    } else {
+        const hasConsent = consentValue === "1";
+        // if the user has declined previously, show a hint with a button to accept
+        if (!hasConsent) {
+            debugLog("user has denied consent");
+            showDeclinedPrivacyHint();
+        } else {
+            debugLog("user has consented");
+            // if the user has already accepted, embed userlike and start probing
+            embedUserLike();
+            probeId = setInterval(detectUserLike, config.probeInterval);
+        }
+    }
+
+    const allowCookies = () => {
+        localStorage.setItem(config.consentKey, 1);
+        embedUserLike();
+        probeId = setInterval(detectUserLike, config.probeInterval);
+        hideElement(privacyModal);
+        debugLog("user has clicked accept");
+    }
+    const denyCookies = () => {
+        localStorage.setItem(config.consentKey, 0);
+        hideElement(privacyModal);
+        showDeclinedPrivacyHint();
+        debugLog("user has clicked deny");
+    }
+
+    privacyAccept.onclick = allowCookies;
+    declinedPrivacyModal.onclick = allowCookies;
+    privacyDecline.onclick = denyCookies;
+
     if (document.querySelector("#animated") != null) {
         setTimeout(typeText, 0);
     }
-    detectUserLike();
-    probeId = setInterval(detectUserLike, config.probeInterval);
     deleteCookies();
     mobileMenu();
     faqBox();
@@ -231,12 +368,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.onscroll = () => {
     if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
-        serviceTimeModal.classList.add("offset");
-        noSlotsModal.classList.add("offset");
-        loadModal.classList.add("offset");
+        addClass(serviceTimeModal, "offset");
+        addClass(noSlotsModal, "offset");
+        addClass(loadModal, "offset");
+        addClass(declinedPrivacyModal, "offset");
     } else {
         removeClassIfPresent(serviceTimeModal, "offset");
         removeClassIfPresent(loadModal, "offset");
         removeClassIfPresent(noSlotsModal, "offset");
+        removeClassIfPresent(declinedPrivacyModal, "offset");
     }
 }
