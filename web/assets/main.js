@@ -14,8 +14,8 @@
  */
  const config = {
     debugMode: true,
-    probeInterval: 250,
-    additionalOfflineChecks: 15,
+    probeInterval: 50,
+    additionalOfflineChecks: 25,
     url: "https://seelsorge-chat.de",
     enableHTTPSRedirect: true,
     consentKey: "seelsorge-consent",
